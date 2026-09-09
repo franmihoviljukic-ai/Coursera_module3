@@ -27,14 +27,7 @@ namespace UserManagementAPI.Controllers
         [HttpGet]
         public ActionResult<List<User>> GetUsers()
         {
-            try
-            {
-                return Ok(users);
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "An unexpected error occurred.");
-            }
+            return Ok(users);
         }
 
         [HttpPost]
@@ -63,29 +56,24 @@ namespace UserManagementAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, User updatedUser)
         {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(updatedUser.Name))
-                    return BadRequest("Name is required.");
 
-                if (string.IsNullOrWhiteSpace(updatedUser.Email) ||
-                    !updatedUser.Email.Contains("@"))
-                    return BadRequest("Valid email is required.");
+            if (string.IsNullOrWhiteSpace(updatedUser.Name))
+                return BadRequest("Name is required.");
 
-                var user = users.FirstOrDefault(x => x.Id == id);
+            if (string.IsNullOrWhiteSpace(updatedUser.Email) ||
+                !updatedUser.Email.Contains("@"))
+                return BadRequest("Valid email is required.");
 
-                if (user == null)
-                    return NotFound();
+            var user = users.FirstOrDefault(x => x.Id == id);
 
-                user.Name = updatedUser.Name;
-                user.Email = updatedUser.Email;
+            if (user == null)
+                return NotFound();
 
-                return NoContent();
-            }
-            catch (Exception)
-            {
-                return StatusCode(500, "An unexpected error occurred.");
-            }
+            user.Name = updatedUser.Name;
+            user.Email = updatedUser.Email;
+
+            return NoContent();
+
         }
 
         [HttpDelete("{id}")]
